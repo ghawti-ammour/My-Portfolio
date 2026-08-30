@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ghaouti Ammour | Full-Stack Developer & UI/UX Designer</title>
+  
+  <!-- Font Awesome for Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700;800&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --bg-dark: #080914;
+      --glass-bg: rgba(255, 255, 255, 0.04);
+      --glass-border: rgba(255, 255, 255, 0.12);
+      --glass-glow: rgba(99, 102, 241, 0.25);
+      --accent-cyan: #38bdf8;
+      --accent-purple: #a855f7;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      overflow-x: hidden;
+      min-height: 100vh;
+      position: relative;
+    }
+
+    /* Ambient Liquid Animated Orbs */
+    .blob {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(120px);
+      z-index: 0;
+      opacity: 0.45;
+      animation: float 14s infinite alternate ease-in-out;
+      pointer-events: none;
+    }
+
+    .blob-1 {
+      width: 550px;
+      height: 550px;
+      background: linear-gradient(135deg, #6366f1, #38bdf8);
+      top: -100px;
+      left: -100px;
+    }
+
+    .blob-2 {
+      width: 500px;
+      height: 500px;
+      background: linear-gradient(135deg, #d946ef, #8b5cf6);
+      bottom: 5%;
+      right: -80px;
+      animation-duration: 18s;
+    }
+
+    .blob-3 {
+      width: 350px;
+      height: 350px;
+      background: linear-gradient(135deg, #06b6d4, #3b82f6);
+      top: 45%;
+      left: 35%;
+      animation-duration: 22s;
+    }
+
+    @keyframes float {
+      0% { transform: translate(0px, 0px) scale(1); }
+      50% { transform: translate(60px, 80px) scale(1.1); }
+      100% { transform: translate(-40px, 40px) scale(0.95); }
+    }
+
+    /* Glass Effect Reusable Classes */
+    .glass-panel {
+      background: var(--glass-bg);
+      backdrop-filter: blur(24px) saturate(160%);
+      -webkit-backdrop-filter: blur(24px) saturate(160%);
+      border: 1px solid var(--glass-border);
+      border-radius: 24px;
+      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.45),
+                  inset 0 1px 1px rgba(255, 255, 255, 0.2);
+      transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+
+    /* Hover lift scoped strictly to interactive content cards */
+    .skill-card:hover,
+    .project-card:hover {
+      border-color: rgba(255, 255, 255, 0.25);
+      box-shadow: 0 35px 70px rgba(0, 0, 0, 0.6),
+                  0 0 30px var(--glass-glow);
+      transform: translateY(-4px);
+    }
+
+    /* Fixed & Stabilized Navigation */
+    .nav-wrapper {
+      position: fixed;
+      top: 20px;
+      left: 0;
+      right: 0;
+      display: flex;
+      justify-content: center;
+      z-index: 1000;
+      padding: 0 20px;
+      pointer-events: none;
+    }
+
+    nav {
+      pointer-events: auto;
+      width: 100%;
+      max-width: 1000px;
+      padding: 14px 28px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(15, 17, 35, 0.7) !important;
+      border-radius: 99px !important;
+      position: relative;
+    }
+
+    .logo {
+      font-weight: 800;
+      font-size: 1.25rem;
+      letter-spacing: -0.5px;
+      background: linear-gradient(90deg, var(--accent-cyan), var(--accent-purple));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-decoration: none;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 28px;
+      list-style: none;
+      align-items: center;
+    }
+
+    .nav-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 600;
+      transition: color 0.2s ease;
+    }
+
+    .nav-links a:hover {
+      color: #fff;
+    }
+
+    .menu-toggle {
+      display: none;
+      background: none;
+      border: none;
+      color: #fff;
+      font-size: 1.3rem;
+      cursor: pointer;
+    }
+
+    /* Container */
+    .container {
+      max-width: 1150px;
+      margin: 0 auto;
+      padding: 0 24px;
+      position: relative;
+      z-index: 10;
+    }
+
+    /* Hero Section */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding-top: 120px;
+      padding-bottom: 60px;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 48px;
+      align-items: center;
+    }
+
+    .hero-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 16px;
+      border-radius: 99px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--accent-cyan);
+      background: rgba(56, 189, 248, 0.1);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      margin-bottom: 20px;
+    }
+
+    .hero-title {
+      font-size: 3.5rem;
+      font-weight: 800;
+      line-height: 1.1;
+      margin-bottom: 18px;
+    }
+
+    .text-gradient {
+      background: linear-gradient(135deg, #fff 30%, var(--accent-cyan) 70%, var(--accent-purple) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero-desc {
+      color: var(--text-muted);
+      font-size: 1.1rem;
+      line-height: 1.6;
+      margin-bottom: 32px;
+    }
+
+    .hero-btns {
+      display: flex;
+      gap: 16px;
+    }
+
+    .btn {
+      padding: 14px 28px;
+      border-radius: 14px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      border: none;
+      transition: all 0.25s ease;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #6366f1, #38bdf8);
+      color: #fff;
+      box-shadow: 0 10px 25px rgba(99, 102, 241, 0.35);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 15px 30px rgba(99, 102, 241, 0.5);
+    }
+
+    .btn-glass {
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      color: var(--text-main);
+      backdrop-filter: blur(10px);
+    }
+
+    .btn-glass:hover {
+      background: rgba(255, 255, 255, 0.08);
+      color: #fff;
+    }
+
+    /* Avatar / Image Glass Container */
+    .photo-wrapper {
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .photo-card {
+      width: 100%;
+      max-width: 380px;
+      aspect-ratio: 1/1.15;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .photo-frame {
+      width: 100%;
+      height: 100%;
+      border-radius: 18px;
+      overflow: hidden;
+      position: relative;
+      background: #1e293b;
+    }
+
+    .photo-frame img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+
+    .photo-card:hover .photo-frame img {
+      transform: scale(1.04);
+    }
+
+    .badge-floating {
+      position: absolute;
+      bottom: 25px;
+      left: 20px;
+      padding: 10px 18px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.85rem;
+      font-weight: 700;
+    }
+
+    /* Section Headings */
+    .section-title {
+      font-size: 2.2rem;
+      font-weight: 800;
+      margin-bottom: 40px;
+      text-align: center;
+    }
+
+    /* Skills Grid */
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 24px;
+      margin-bottom: 100px;
+    }
+
+    .skill-card {
+      padding: 28px;
+    }
+
+    .skill-card i {
+      font-size: 2rem;
+      margin-bottom: 16px;
+      color: var(--accent-cyan);
+    }
+
+    .skill-card h3 {
+      font-size: 1.2rem;
+      margin-bottom: 12px;
+    }
+
+    .skill-card p {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    /* Projects Grid */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 30px;
+      margin-bottom: 120px;
+    }
+
+    .project-card {
+      padding: 30px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .project-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+
+    .project-header i.folder {
+      font-size: 1.8rem;
+      color: var(--accent-cyan);
+    }
+
+    .project-links a {
+      color: var(--text-muted);
+      font-size: 1.2rem;
+      margin-left: 14px;
+      transition: color 0.2s;
+    }
+
+    .project-links a:hover {
+      color: #fff;
+    }
+
+    .project-card h3 {
+      font-size: 1.35rem;
+      margin-bottom: 10px;
+    }
+
+    .project-card p {
+      color: var(--text-muted);
+      font-size: 0.92rem;
+      line-height: 1.6;
+      margin-bottom: 24px;
+    }
+
+    .tech-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .tech-tag {
+      font-size: 0.75rem;
+      padding: 5px 12px;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      color: #cbd5e1;
+      font-weight: 600;
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 40px 0;
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+
+    /* Responsive */
+    @media (max-width: 860px) {
+      .hero-grid {
+        grid-template-columns: 1fr;
+        text-align: center;
+      }
+      .hero-btns {
+        justify-content: center;
+      }
+      .hero-title {
+        font-size: 2.6rem;
+      }
+      .photo-wrapper {
+        margin-top: 20px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .menu-toggle {
+        display: block;
+      }
+
+      .nav-links {
+        position: absolute;
+        top: calc(100% + 12px);
+        left: 0;
+        right: 0;
+        flex-direction: column;
+        background: rgba(15, 17, 35, 0.95);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border: 1px solid var(--glass-border);
+        border-radius: 20px;
+        padding: 24px;
+        gap: 18px;
+        display: none;
+      }
+
+      .nav-links.active {
+        display: flex;
+      }
+    }
+
+    /* Contact Section */
+    .contact-section {
+      padding: 80px 0 60px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .contact-card {
+      width: 100%;
+      max-width: 820px;
+      padding: 32px;
+      border-radius: 18px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      align-items: start;
+    }
+
+    .contact-card h3 {
+      font-size: 1.6rem;
+      margin-bottom: 10px;
+    }
+
+    /* Centered single-column layout when only links are present */
+    .contact-card.centered {
+      grid-template-columns: 1fr;
+      text-align: center;
+      align-items: center;
+    }
+
+    .contact-links { margin-top: 12px; color: var(--text-muted); font-size: 0.95rem; }
+    .contact-links a.email-link { color: var(--text-main); text-decoration: underline; display:block; margin-bottom:8px; }
+
+    .socials { margin-top: 14px; display:flex; gap:18px; justify-content:center; align-items:center; }
+
+    @media (max-width: 860px) {
+      .contact-card { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Liquid Light Canvas / Floating Blobs -->
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
+
+  <!-- Stabilized Navigation Bar -->
+  <div class="nav-wrapper">
+    <nav class="glass-panel">
+      <a href="#about" class="logo">Ghaouti.Ammour</a>
+      <button class="menu-toggle" id="menu-btn" aria-label="Toggle Navigation">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+      <ul class="nav-links" id="nav-menu">
+        <li><a href="#about">About</a></li>
+        <li><a href="#skills">Skills</a></li>
+        <li><a href="#projects">Work</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </nav>
+  </div>
+
+  <!-- Main Container -->
+  <div class="container">
+
+    <!-- Hero Section -->
+    <section class="hero" id="about">
+      <div class="hero-grid">
+        
+        <!-- Left Content -->
+        <div class="hero-text">
+          <div class="hero-tag">
+            <i class="fa-solid fa-bolt"></i> Available for Full-Stack & UI/UX Work
+          </div>
+          <h1 class="hero-title">
+            Crafting Digital Experiences as a <span class="text-gradient">Designer & Engineer</span>.
+          </h1>
+          <p class="hero-desc">
+            I bridge aesthetic UI/UX design with reliable full-stack architecture and network systems, building fast, modern web applications from concept to deployment.
+          </p>
+          <div class="hero-btns">
+            <a href="#projects" class="btn btn-primary">
+              <i class="fa-solid fa-diagram-project"></i> View Projects
+            </a>
+            <a href="mailto:contact@example.com" class="btn btn-glass">
+              <i class="fa-solid fa-paper-plane"></i> Let's Talk
+            </a>
+          </div>
+        </div>
+
+        <!-- Right Content: Profile Image in Liquid Glass -->
+        <div class="photo-wrapper">
+          <div class="glass-panel photo-card" id="tilt-card">
+            <div class="photo-frame">
+              <!-- Replace src with your photo image path -->
+              <img src="ghawti.jpg" alt="Profile Photo" id="user-photo" />
+            </div>
+            <div class="glass-panel badge-floating">
+              <i class="fa-solid fa-code" style="color: var(--accent-cyan);"></i> Full-Stack & UI/UX
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section id="skills">
+      <h2 class="section-title">What I Bring to the Table</h2>
+      <div class="skills-grid">
+        
+        <div class="glass-panel skill-card">
+          <i class="fa-solid fa-pen-nib"></i>
+          <h3>UI/UX & Visual Design</h3>
+          <p>Wireframing, prototypes, interactive micro-animations, design systems, and commercial branding graphics with Figma & Photoshop.</p>
+        </div>
+
+        <div class="glass-panel skill-card">
+          <i class="fa-solid fa-laptop-code"></i>
+          <h3>Frontend Engineering</h3>
+          <p>Developing responsive, fluid SPAs using modern React, Flutter, Tailwind CSS, clean JavaScript (ES6+), and smooth transitions.</p>
+        </div>
+
+        <div class="glass-panel skill-card">
+          <i class="fa-solid fa-server"></i>
+          <h3>Backend & Architecture</h3>
+          <p>Constructing scalable RESTful APIs, robust database models with Node.js, Express, MySQL, and SQLite with top-tier query performance.</p>
+        </div>
+
+        <div class="glass-panel skill-card">
+          <i class="fa-solid fa-network-wired"></i>
+          <h3>Systems & Networks</h3>
+          <p>Network routing, distributed systems configurations, server management, and deployment pipelines.</p>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects">
+      <h2 class="section-title">Featured Projects</h2>
+      <div class="projects-grid">
+        
+        <!-- Project 1 -->
+        <div class="glass-panel project-card">
+          <div>
+            <div class="project-header">
+              <i class="fa-regular fa-folder-open folder"></i>
+              <div class="project-links">
+                <a href="#" target="_blank" title="GitHub Code"><i class="fa-brands fa-github"></i></a>
+                <a href="#" target="_blank" title="Live Demo"><i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+              </div>
+            </div>
+            <h3>S.A.C.H System</h3>
+            <p>Academic workload distribution system featuring automated timetable allocations, teacher profiles, and real-time schedule calculations.</p>
+          </div>
+          <div class="tech-tags">
+            <span class="tech-tag">React</span>
+            <span class="tech-tag">Node.js</span>
+            <span class="tech-tag">Express</span>
+            <span class="tech-tag">MySQL</span>
+          </div>
+        </div>
+
+        <!-- Project 2 -->
+        <div class="glass-panel project-card">
+          <div>
+            <div class="project-header">
+              <i class="fa-regular fa-folder-open folder"></i>
+              <div class="project-links">
+                <a href="#" target="_blank" title="GitHub Code"><i class="fa-brands fa-github"></i></a>
+                <a href="#" target="_blank" title="Live Demo"><i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+              </div>
+            </div>
+            <h3>NoorCare Healthcare</h3>
+            <p>A multi-tier medical portal for booking consultations, patient record tracking, and doctor dashboard analytics with an intuitive UI.</p>
+          </div>
+          <div class="tech-tags">
+            <span class="tech-tag">React</span>
+            <span class="tech-tag">UI/UX Design</span>
+            <span class="tech-tag">REST API</span>
+            <span class="tech-tag">Tailwind</span>
+          </div>
+        </div>
+
+        <!-- Project 3 -->
+        <div class="glass-panel project-card">
+          <div>
+            <div class="project-header">
+              <i class="fa-regular fa-folder-open folder"></i>
+              <div class="project-links">
+                <a href="#" target="_blank" title="GitHub Code"><i class="fa-brands fa-github"></i></a>
+                <a href="#" target="_blank" title="Live Demo"><i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+              </div>
+            </div>
+            <h3>Commercial Mockups & Branding</h3>
+            <p>High-end marketing visual assets, digital showcase displays, and packaging designs for commercial retail environments.</p>
+          </div>
+          <div class="tech-tags">
+            <span class="tech-tag">Figma</span>
+            <span class="tech-tag">canva</span>
+            <span class="tech-tag">Digital Art</span>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact-section">
+      <div class="glass-panel contact-card centered">
+        <div>
+          <h3>Contact Me</h3>
+
+          <div class="contact-links">
+            <div class="socials" aria-label="social links">
+              <a href="https://www.linkedin.com/in/ghawtiammour" target="_blank" rel="noopener" title="LinkedIn">
+                <i class="fa-brands fa-linkedin" style="font-size:1.4rem;color:var(--accent-cyan);"></i>
+              </a>
+              <a href="https://www.facebook.com/ghawtiammour" target="_blank" rel="noopener" title="Facebook">
+                <i class="fa-brands fa-facebook" style="font-size:1.4rem;color:#1877f2"></i>
+              </a>
+              <a href="https://www.instagram.com/ghawtiammour" target="_blank" rel="noopener" title="Instagram">
+                <i class="fa-brands fa-instagram" style="font-size:1.4rem;color:#e1306c"></i>
+              </a>
+              <a href="https://twitter.com/ghawtiammour" target="_blank" rel="noopener" title="Twitter">
+                <i class="fa-brands fa-x-twitter" style="font-size:1.4rem;color:#1da1f2"></i>
+              </a>
+              <a href="https://github.com/ghawtiammour" target="_blank" rel="noopener" title="GitHub">
+                <i class="fa-brands fa-github" style="font-size:1.4rem;color:var(--text-main)"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+      <p>© 2026 Ghaouti Ammour.</p>
+    </footer>
+
+  </div>
+
+  <!-- Interactive Scripts -->
+  <script>
+    // 3D Card Tilt Effect
+    const tiltCard = document.getElementById('tilt-card');
+
+    if (tiltCard) {
+      tiltCard.addEventListener('mousemove', (e) => {
+        const rect = tiltCard.getBoundingClientRect();
+        const x = e.clientX - rect.left - rect.width / 2;
+        const y = e.clientY - rect.top - rect.height / 2;
+        
+        const rotateX = (-y / (rect.height / 2)) * 12;
+        const rotateY = (x / (rect.width / 2)) * 12;
+
+        tiltCard.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
+      });
+
+      tiltCard.addEventListener('mouseleave', () => {
+        tiltCard.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`;
+      });
+    }
+
+    // Mobile Menu Toggle
+    const menuBtn = document.getElementById('menu-btn');
+    const navMenu = document.getElementById('nav-menu');
+
+    if (menuBtn && navMenu) {
+      menuBtn.addEventListener('click', () => {
+        navMenu.classList.toggle('active');
+      });
+
+      document.querySelectorAll('.nav-links a').forEach(link => {
+        link.addEventListener('click', () => {
+          navMenu.classList.remove('active');
+        });
+      });
+    }
+
+    // Contact form removed — social links only.
+  </script>
+</body>
+</html>
